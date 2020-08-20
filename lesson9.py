@@ -98,6 +98,6 @@ for symbol in alphabet:
 
 # Чтение файлов из папки
 tmp_folder = sorted(os.listdir('tmp'), reverse=True)
-# Удаление половины случайных файлов
+# "Щелчек Таноса" Удаление половины случайных файлов
 for file in list(set(tmp_folder))[:len(tmp_folder)//2]:
     os.remove(os.path.join('tmp', file))
