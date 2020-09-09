@@ -1,4 +1,6 @@
 import random
+from tkinter import *
+
 
 class My15:
     def __init__(self):
@@ -32,43 +34,67 @@ class My15:
     def move_up(self):
         if self.row == 3:
             return
-        self.my_15[self.row][self.col], self.my_15[self.row + 1][self.col] =  self.my_15[self.row + 1][self.col], self.my_15[self.row][self.col]
+        self.my_15[self.row][self.col], self.my_15[self.row + 1][self.col] = self.my_15[self.row + 1][self.col], \
+                                                                             self.my_15[self.row][self.col]
         self.row += 1
 
     def move_down(self):
         if self.row == 0:
             return
-        self.my_15[self.row][self.col], self.my_15[self.row - 1][self.col] =  self.my_15[self.row - 1][self.col], self.my_15[self.row][self.col]
+        self.my_15[self.row][self.col], self.my_15[self.row - 1][self.col] = self.my_15[self.row - 1][self.col], \
+                                                                             self.my_15[self.row][self.col]
         self.row -= 1
 
     def move_left(self):
         if self.col == 3:
             return
-        self.my_15[self.row][self.col], self.my_15[self.row][self.col + 1] =  self.my_15[self.row][self.col + 1], self.my_15[self.row][self.col]
+        self.my_15[self.row][self.col], self.my_15[self.row][self.col + 1] = self.my_15[self.row][self.col + 1], \
+                                                                             self.my_15[self.row][self.col]
         self.col += 1
 
     def move_right(self):
         if self.row == 0:
             return
-        self.my_15[self.row][self.col], self.my_15[self.row][self.col - 1] =  self.my_15[self.row][self.col - 1], self.my_15[self.row][self.col]
+        self.my_15[self.row][self.col], self.my_15[self.row][self.col - 1] = self.my_15[self.row][self.col - 1], \
+                                                                             self.my_15[self.row][self.col]
         self.col -= 1
 
 
+def draw_15_table(my_15):
+    for row_index, row in enumerate(my_15.my_15):
+        for col_index, col in enumerate(row):
+            label = Entry(root, width=2, fg='blue', font=('Arial', 50, 'bold'), justify='center')
+            label.grid(row=row_index, column=col_index)
+            label.insert(END, col)
+
+
+def left(event):
+    my_15.move_right()
+    draw_15_table(my_15)
+
+
+def right(event):
+    my_15.move_left()
+    draw_15_table(my_15)
+
+
+def up(event):
+    my_15.move_down()
+    draw_15_table(my_15)
+
+
+def down(event):
+    my_15.move_up()
+    draw_15_table(my_15)
 
 
 my_15 = My15()
-my_15.print_15()
-print(my_15.row, my_15.col)
-print('-------------------')
-my_15.move_up()
-my_15.print_15()
-print('-------------------')
-my_15.move_down()
-my_15.print_15()
-print('-------------------')
-my_15.move_left()
-my_15.print_15()
-print('-------------------')
-my_15.move_right()
-my_15.print_15()
-
+root = Tk()
+root.title("15")
+root.geometry("275x280")
+draw_15_table(my_15)
+root.bind("<Left>", left)
+root.bind("<Right>", right)
+root.bind("<Up>", up)
+root.bind("<Down>", down)
+root.mainloop()
