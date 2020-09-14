@@ -28,6 +28,7 @@ class Piece:
 class Pawn(Piece):
     def __init__(self, color, place):
         super().__init__(color, place)
+        self.type = "Pawn"
         self.moves = self.get_moves()
         self.takes = self.get_takes()
         self.target = self.new_target()
@@ -81,7 +82,6 @@ class Pawn(Piece):
                 new_place = right_place.replace(str(place_number), str(new_number))
                 takes.append(new_place)
 
-
         return takes
 
     def new_target(self):
@@ -91,6 +91,7 @@ class Pawn(Piece):
 class Queen(Piece):
     def __init__(self, color, place):
         super().__init__(color, place)
+        self.type = "Queen"
         self.moves = self.get_moves()
         self.takes = self.get_takes()
         self.target = self.new_target()
@@ -105,6 +106,75 @@ class Queen(Piece):
         return "A1"
 
 
-pawn = Pawn('white', 'E2')
-print(pawn)
+class EmptyCell(Piece):
+    def __init__(self, color="", place=""):
+        super().__init__(color, place)
+        self.type = ""
+        self.moves = self.get_moves()
+        self.takes = self.get_takes()
+        self.target = self.new_target()
 
+    def get_moves(self):
+        return []
+
+    def get_takes(self):
+        return []
+
+    def new_target(self):
+        return ""
+
+
+# pawn = Piece('white', 'E2')
+# print(pawn.__class__.__name__)
+
+class Desk:
+    def __init__(self):
+        self.cells = {}
+        self._queens = []
+        self._pawns = []
+        for symbol in "ABCDEFGH":
+            for num in range(1, 9):
+                self.cells[f"{symbol}{num}"] = EmptyCell()
+
+    @property
+    def queens(self):
+        self._get_pieces()
+        return self._queens
+
+    @property
+    def pawns(self):
+        self._get_pieces()
+        return self._pawns
+
+
+    def _get_pieces(self):
+        self._queens = []
+        self._pawns = []
+        for place in self.cells:
+            if self.cells[place].type == "Queen":
+                self._queens.append(place)
+            elif self.cells[place].type == "Pawn":
+                self._pawns.append(place)
+
+    def __repr__(self):
+        return "\n".join([f"place: {key}, type: {self.cells[key]}" for key in self.cells])
+
+    def set_piece(self, place, type_piece, color):
+        if type_piece == 'Queen':
+            value = Queen(color, place)
+        else:
+            value = Pawn(color, place)
+        self.cells[place] = value
+
+    def clean_piece(self, place):
+        self.cells[place] = EmptyCell()
+
+
+desk = Desk()
+desk.set_piece("A1", "Queen", "Black")
+desk.set_piece("D5", "Knight", "Black")
+desk.clean_piece("A1")
+
+test_cell = desk.cells["A1"]
+
+print(test_cell)
